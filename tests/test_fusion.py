@@ -1,36 +1,30 @@
 import pytest
-from rag_fusion.fusion import ReciprocalRankFusion, QueryExpander
-from rag_fusion.store import VectorStore
-from rag_fusion.pipeline import RAGFusionPipeline
+from src.services.fusion import ReciprocalRankFusionEngine, DenseVectorStore
+from src.schemas.document import DocumentResponse
 
+def test_dense_vector_search(vector_store):
+    hits = vector_store.search("How to configure PostgreSQL pool?", top_k=2)
+    assert len(hits) == 2
+    assert hits[0].score is not None
+    assert hits[0].score > 0
 
-def test_rrf_ranking():
-    fusion = ReciprocalRankFusion(k=60)
-    
-    list1 = [
-        {"id": "doc1", "text": "Doc 1"},
-        {"id": "doc2", "text": "Doc 2"},
+def test_rrf_scoring_convergence(fusion_engine):
+    batch1 = [
+        DocumentResponse(id="doc_a", text="Postgres", metadata={}),
+        DocumentResponse(id="doc_b", text="Redis", metadata={}),
     ]
-    list2 = [
-        {"id": "doc2", "text": "Doc 2"},
-        {"id": "doc3", "text": "Doc 3"},
+    batch2 = [
+        DocumentResponse(id="doc_b", text="Redis", metadata={}),
+        DocumentResponse(id="doc_c", text="K8s", metadata={}),
     ]
-
-    fused = fusion.fuse([list1, list2], top_n=3)
+    fused = fusion_engine.fuse_rankings([batch1, batch2], top_k=3)
     assert len(fused) == 3
-    # doc2 appeared in both lists, so its accumulated RRF score must be highest
-    assert fused[0]["id"] == "doc2"
-    assert fused[0]["rrf_score"] > fused[1]["rrf_score"]
+    # doc_b appeared in both queries, so its accumulated RRF score must be strictly highest
+    assert fused[0].id == "doc_b"
+    assert fused[0].rrf_score > fused[1].rrf_score
 
-
-def test_rag_pipeline_end_to_end():
-    store = VectorStore()
-    store.add_document("Python FastAPI is super fast for building REST APIs")
-    store.add_document("Docker Compose organizes containers seamlessly")
-
-    pipeline = RAGFusionPipeline(store)
-    res = pipeline.query("How to build APIs with FastAPI?")
-
-    assert "fused_documents" in res
-    assert len(res["fused_documents"]) > 0
+def test_end_to_end_rag_query(fusion_engine):
+    res = fusion_engine.execute_rag("Database caching solutions", top_k=2, num_queries=3)
     assert len(res["expanded_queries"]) == 3
+    assert len(res["fused_results"]) == 2
+    assert len(res["synthesized_context"]) > 0
