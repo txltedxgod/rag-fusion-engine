@@ -1,34 +1,82 @@
-# ⚡ RAG Fusion Engine
+# RAG Fusion Engine
 
-[![CI](https://github.com/txltedxgod/rag-fusion-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/txltedxgod/rag-fusion-engine/actions)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi)](https://fastapi.tiangolo.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+Production-grade Retrieval-Augmented Generation (RAG) service in Python 3.11 implementing Reciprocal Rank Fusion (RRF) and multi-perspective query expansion.
 
-**RAG Fusion Engine** is a high-accuracy Retrieval-Augmented Generation system in Python with multi-query expansion and Reciprocal Rank Fusion (RRF) scoring.
+## Overview
+
+Traditional single-query vector retrieval often fails to capture the full semantic scope of complex user prompts. RAG Fusion Engine overcomes this by:
+1. Expanding user queries into multiple semantic viewpoints.
+2. Executing parallel vector retrieval across the dense index.
+3. Applying **Reciprocal Rank Fusion (RRF)** to score and merge results:
+
+$$\text{RRF}(d) = \sum_{q \in Q} \frac{1}{k + \text{rank}_q(d)}$$
+
+where $k=60$ acts as a ranking stability constant.
+
+## Project Structure
 
 ```
-[User Query] ──> [ Query Expander (3 Perspectives) ]
-                        │
-       ┌────────────────┼────────────────┐
-       ▼                ▼                ▼
-   [Query 1]        [Query 2]        [Query 3]
-       │                │                │
-       ▼                ▼                ▼
-   [Top 5 Hits]    [Top 5 Hits]    [Top 5 Hits]
-       └────────────────┬────────────────┘
-                        ▼
-       [ Reciprocal Rank Fusion (RRF) ]
-                        │
-                        ▼
-          [ Top Re-Ranked Documents ]
+├── src/
+│   ├── api/v1/          # REST endpoints and request handlers
+│   ├── core/            # App settings, logging, and custom exceptions
+│   ├── schemas/         # Pydantic v2 data models & validation
+│   ├── services/        # Vector indexing and RRF algorithm implementation
+│   └── main.py          # FastAPI application factory & lifespan context
+├── tests/
+│   ├── conftest.py      # Pytest fixtures and test harnesses
+│   └── test_fusion.py   # Unit & convergence test suite
+├── Dockerfile           # Multi-stage container definition
+├── Makefile             # Development automation targets
+└── pyproject.toml       # Tooling configs (ruff, mypy, pytest)
 ```
 
-## 🚀 Quick Start
+## Quick Start
+
+### Local Setup
 ```bash
-docker compose up -d
-curl -X POST "http://localhost:8000/api/v1/search" -H "Content-Type: application/json" -d '{"query": "FastAPI async performance"}'
+# 1. Install dependencies
+make install
+
+# 2. Run test suite
+make test
+
+# 3. Start development server
+make run
 ```
 
-## 📄 License
-MIT License
+### Docker
+```bash
+docker compose up -d --build
+```
+
+## API Reference
+
+### 1. Ingest Document
+```bash
+curl -X POST "http://localhost:8000/api/v1/documents" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "PostgreSQL 16 introduces enhanced parallel query execution for hash joins.",
+    "metadata": {"category": "database", "version": "16"}
+  }'
+```
+
+### 2. Multi-Query RAG Search
+```bash
+curl -X POST "http://localhost:8000/api/v1/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "PostgreSQL query performance tuning",
+    "top_k": 3,
+    "num_queries": 3
+  }'
+```
+
+## Development & Linting
+```bash
+make lint    # Run ruff & mypy checks
+make format  # Auto-format codebase
+```
+
+## License
+MIT
