@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  rag-fusion:
+    build: .
+    container_name: rag-fusion-engine
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

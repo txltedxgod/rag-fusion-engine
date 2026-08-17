@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-fusion-engine"
+version = "0.1.0"
+description = "Advanced RAG engine with Reciprocal Rank Fusion (RRF), Multi-Query Expansion, and Cross-Encoder Reranking"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "pydantic>=2.5.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "numpy>=1.24.0",
+    "httpx>=0.27.0",
+]
