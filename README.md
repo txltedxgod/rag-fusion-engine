@@ -10,6 +10,25 @@ Production-grade Retrieval-Augmented Generation (RAG) service in Python 3.11 imp
 
 ## Overview
 
+```mermaid
+flowchart LR
+    User([User Prompt]) --> Expander[Multi-Query Expander]
+    Expander --> Q1[Query Perspective 1]
+    Expander --> Q2[Query Perspective 2]
+    Expander --> Q3[Query Perspective 3]
+    
+    Q1 --> VectorDB[(Dense Vector Index)]
+    Q2 --> VectorDB
+    Q3 --> VectorDB
+    
+    VectorDB --> RRF[Reciprocal Rank Fusion k=60]
+    RRF --> CrossEncoder[Cross-Encoder Reranker]
+    CrossEncoder --> Context[Optimized Top-K Context]
+    Context --> LLM([Final LLM Response])
+```
+
+
+
 Traditional single-query vector retrieval often fails to capture the full semantic scope of complex user prompts. RAG Fusion Engine overcomes this by:
 1. Expanding user queries into multiple semantic viewpoints.
 2. Executing parallel vector retrieval across the dense index.
