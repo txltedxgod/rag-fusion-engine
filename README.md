@@ -1,5 +1,11 @@
 # RAG Fusion Engine
 
+[![CI](https://github.com/txltedxgod/rag-fusion-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/txltedxgod/rag-fusion-engine/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
+
+
 Production-grade Retrieval-Augmented Generation (RAG) service in Python 3.11 implementing Reciprocal Rank Fusion (RRF) and multi-perspective query expansion.
 
 ## Overview
