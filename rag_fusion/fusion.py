@@ -1,6 +1,5 @@
-from typing import List, Dict, Any
-import numpy as np
 from collections import defaultdict
+from typing import Any
 
 
 class ReciprocalRankFusion:
@@ -11,7 +10,7 @@ class ReciprocalRankFusion:
     def __init__(self, k: int = 60):
         self.k = k
 
-    def fuse(self, ranked_result_lists: List[List[Dict[str, Any]]], top_n: int = 5) -> List[Dict[str, Any]]:
+    def fuse(self, ranked_result_lists: list[list[dict[str, Any]]], top_n: int = 5) -> list[dict[str, Any]]:
         scores = defaultdict(float)
         doc_store = {}
 
@@ -36,7 +35,7 @@ class ReciprocalRankFusion:
 
 class QueryExpander:
     """Generates varied perspective queries from an initial prompt."""
-    def expand(self, query: str, num_queries: int = 3) -> List[str]:
+    def expand(self, query: str, num_queries: int = 3) -> list[str]:
         perspectives = [
             f"{query} architectural overview and key concepts",
             f"how to implement {query} step by step guide",

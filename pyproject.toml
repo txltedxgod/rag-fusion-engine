@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rag-fusion-engine"
 version = "1.0.0"
-description = "Advanced RAG engine with Reciprocal Rank Fusion (RRF), Multi-Query Expansion, and Dense Vector Search"
+description = "Advanced RAG engine with Reciprocal Rank Fusion (RRF), Multi-Query Expansion, and Hybrid Dense/BM25 Search"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
@@ -48,7 +48,9 @@ ignore = ["E501"]
 minversion = "7.0"
 addopts = "-ra -q --strict-markers"
 testpaths = ["tests"]
+pythonpath = ["."]
 python_files = ["test_*.py"]
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.mypy]
 python_version = "3.11"

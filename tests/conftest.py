@@ -1,5 +1,7 @@
 import pytest
+
 from src.services.fusion import DenseVectorStore, ReciprocalRankFusionEngine
+
 
 @pytest.fixture
 def vector_store():
