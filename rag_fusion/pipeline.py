@@ -1,5 +1,6 @@
-from typing import Dict, Any, List
-from rag_fusion.fusion import ReciprocalRankFusion, QueryExpander
+from typing import Any
+
+from rag_fusion.fusion import QueryExpander, ReciprocalRankFusion
 from rag_fusion.store import VectorStore
 
 
@@ -9,7 +10,7 @@ class RAGFusionPipeline:
         self.expander = QueryExpander()
         self.fusion = ReciprocalRankFusion(k=k)
 
-    def query(self, user_prompt: str, top_k: int = 3) -> Dict[str, Any]:
+    def query(self, user_prompt: str, top_k: int = 3) -> dict[str, Any]:
         # 1. Expand into multi-queries
         queries = self.expander.expand(user_prompt, num_queries=3)
 

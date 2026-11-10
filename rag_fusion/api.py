@@ -1,9 +1,10 @@
+from typing import Any
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
 
-from rag_fusion.store import VectorStore
 from rag_fusion.pipeline import RAGFusionPipeline
+from rag_fusion.store import VectorStore
 
 app = FastAPI(
     title="RAG Fusion Engine",
@@ -22,7 +23,7 @@ pipeline = RAGFusionPipeline(store)
 
 class IngestRequest(BaseModel):
     text: str
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: dict[str, Any] | None = None
 
 
 class SearchRequest(BaseModel):

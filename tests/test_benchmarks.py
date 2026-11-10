@@ -3,7 +3,7 @@ RRF Benchmark & Stress Testing Suite
 Evaluates throughput (QPS) and reciprocal rank fusion precision.
 """
 import time
-import pytest
+
 
 def reciprocal_rank_fusion(rankings: list[list[str]], k: int = 60) -> dict[str, float]:
     scores = {}

@@ -1,4 +1,5 @@
-from fastapi import HTTPException, status
+from fastapi import status
+
 
 class BaseAppException(Exception):
     def __init__(self, message: str, status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR):
