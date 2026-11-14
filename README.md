@@ -7,6 +7,18 @@
 
 Production-grade Retrieval-Augmented Generation (RAG) service in Python 3.11+ implementing hybrid dense/BM25+ retrieval, multi-perspective query expansion, Reciprocal Rank Fusion (RRF), and cross-encoder span reranking.
 
+---
+
+## 🎬 Feature Demo
+
+<p align="center">
+  <img src="assets/demo.gif" alt="RAG Fusion Engine Feature Demo — Hybrid Dense/BM25+ Retrieval, RRF & Cross-Encoder Reranking" width="840" />
+</p>
+<p align="center">
+  <sub><a href="assets/demo.mp4">Watch / Download 1080p60 MP4</a></sub>
+</p>
+
+---
 ## Overview
 
 ```mermaid
